@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-FILE* open_filename(FILE* myfile, char* filename, char* mode);
-void show_with_linenumbers(FILE* myfile);
-void show_without_linenumbers(FILE* myfile);
-void show_hex(FILE* myfile);
-void close_all(FILE* myfile);
+FILE* open_filename(FILE* file, char* filename, char* mode);
+void show_with_linenumbers(FILE* file);
+void show_without_linenumbers(FILE* file);
+void show_hex(FILE* file);
+void close_all(FILE* file);
 void print_help(void);
 
 int main(int argc, char* argv[])
@@ -15,34 +15,34 @@ int main(int argc, char* argv[])
     if(argc == 3)
     {
         char* filename = argv[1];
-        FILE* myfile = NULL;
+        FILE* file = NULL;
         int result;
         
         result = strcmp(argv[2], "--no");
         if(result == 0)
         {
-            myfile = open_filename(myfile, filename, "r");
-            show_without_linenumbers(myfile);
+            file = open_filename(file, filename, "r");
+            show_without_linenumbers(file);
         }
         else
         {
             result = strcmp(argv[2], "--hex");
             if(result == 0)
             {
-                myfile = open_filename(myfile, filename, "rb");
-                show_hex(myfile);
+                file = open_filename(file, filename, "rb");
+                show_hex(file);
             }
             else
                 print_help();
         }
         
-        close_all(myfile);
+        close_all(file);
         
     }
     else if(argc == 2)
     {
         char* filename = argv[1];
-        FILE* myfile = NULL;
+        FILE* file = NULL;
         
         int result = strcmp(argv[1], "--help");
         
@@ -50,9 +50,9 @@ int main(int argc, char* argv[])
             print_help();
         else
         {
-            myfile = open_filename(myfile, filename, "r");
-            show_with_linenumbers(myfile);
-            close_all(myfile);
+            file = open_filename(file, filename, "r");
+            show_with_linenumbers(file);
+            close_all(file);
         }
     }
     else
@@ -63,26 +63,26 @@ int main(int argc, char* argv[])
 
 void print_help()
 {
-    printf("\n-> show <filename> with linenumbers\n");
+    printf("\n-> Read <filename> with linenumbers\n");
     printf("\nUsage:\t$./show <filename> (--no / --hex)\n\n");
     printf("\t--no  = show <filename> without linenumbers\n");
     printf("\t--hex = show <filename> as hexdump\n\n");
     exit(0);
 }
 
-FILE* open_filename(FILE* myfile, char* filename, char* mode)
+FILE* open_filename(FILE* file, char* filename, char* mode)
 {
-    myfile = fopen(filename, mode);
-    if(!myfile)
+    file = fopen(filename, mode);
+    if(!file)
     {
         printf("%s not found\n", filename);
         exit(1);
     }
     
-    return(myfile);
+    return(file);
 }
 
-void show_with_linenumbers(FILE* myfile)
+void show_with_linenumbers(FILE* file)
 {    
     int x = 1;
     char c;
@@ -90,7 +90,7 @@ void show_with_linenumbers(FILE* myfile)
     printf("%4i : ", x);
     do
     {
-        c = (char)fgetc(myfile);
+        c = (char)fgetc(file);
         if(c == '\n')
         {
             x++;
@@ -107,13 +107,13 @@ void show_with_linenumbers(FILE* myfile)
     printf("\n");
 }
 
-void show_without_linenumbers(FILE* myfile)
+void show_without_linenumbers(FILE* file)
 {
     char c;
     
     do
     {
-        c = (char)fgetc(myfile);
+        c = (char)fgetc(file);
         if(c == '\n')
         {
             printf("\n");
@@ -143,7 +143,7 @@ void show_hex(FILE* hexfile)
     printf("\n\n");
 }
 
-void close_all(FILE* myfile)
+void close_all(FILE* file)
 {
-    fclose(myfile);
+    fclose(file);
 }
