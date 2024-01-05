@@ -8,24 +8,25 @@ const int maxballs = 49;
 
 void seedrnd(void);
 int rnd(int range);
-void print_array(int* array, int size);
 void sort_array(int* array, int size);
+void print_array(int* array, int size);
 
 int main()
 {
     int x;
     int b;
-    int numbers_array[maxballs];
+    int numbers[maxballs];
     int balls[SIZE];
     
     // Array mit 0 fuellen
     for(x = 0; x < maxballs; x++)
-        numbers_array[x] = 0;
+        numbers[x] = 0;
     
     printf("L O T T O - Z I E H U N G\n\n");
-    seedrnd();
     printf("Eingabe druecken zum Starten ...\n");
     getchar();
+    
+    seedrnd();
     
     // Zahlen ziehen:
     for(x = 0; x < SIZE; x++)
@@ -35,14 +36,14 @@ int main()
         {
             b = rnd(maxballs);
         }
-        while(numbers_array[b-1]);  // bereits gezogen?, wdh wenn 0(FALSE)
+        while(numbers[b-1]);    // bereits gezogen?, wdh bis 0(FALSE)
         
-        numbers_array[b-1] = 1;     // als gezogen markieren mit 1;
-        balls[x] = b;               // in neues Array[6] legen;
+        numbers[b-1] = 1;       // dann als gezogen markieren mit 1;
+        balls[x] = b;               // und in neues Array[6] legen;
     }
     
-    sort_array(balls, SIZE);
-    print_array(balls, SIZE);
+    sort_array(balls, SIZE);    // bubble sort
+    print_array(balls, SIZE);   // Ausgabe
     
     return 0;
 }
@@ -73,6 +74,8 @@ void print_array(int* array, int size)
 
 void sort_array(int* array, int size)
 {
+    // Veraendert urspruengliches Array !
+    
     int temp;
     int a, b;
     
@@ -80,8 +83,8 @@ void sort_array(int* array, int size)
     {
         for(b = a + 1; b < SIZE; b++)
         {
-            if(*(array+a) > *(array+b))
-            {
+            if(*(array+a) > *(array+b))     // pointer notation fuer
+            {                               // array[a] > array[b]
                 temp = *(array + a);
                 *(array + a) = *(array + b);
                 *(array + b) = temp;
